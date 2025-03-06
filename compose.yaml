@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: fake-mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: fakeuser
+      MONGO_INITDB_ROOT_PASSWORD: fakepassword
+      MONGO_INITDB_DATABASE: fake_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  my-housing-app:
+    build: .
+    container_name: fake-housing-server
+    depends_on:
+      - mongodb
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://fakeuser:fakepassword@mongodb:27017/fake_db?authSource=admin
+    ports:
+      - "8080:8080"
+
+volumes:
+  mongo-data:

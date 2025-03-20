@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/loaders")
+@RequestMapping("/api") // Ruta base para todos los endpoints
 public class HousingLoaderController {
 
     private final HousingLoaderService service;
@@ -16,8 +16,15 @@ public class HousingLoaderController {
         this.service = service;
     }
 
-    @GetMapping
+    // Endpoint GET para obtener todos los HousingLoader
+    @GetMapping("/houses")
     public List<HousingLoader> getAllLoaders() {
         return service.getAllLoaders();
+    }
+
+    @PostMapping("/house") // Ruta específica para POST
+    public String addHousing(@RequestBody HousingLoader housingLoader) {
+        service.saveLoader(housingLoader);
+        return "HousingLoader añadido correctamente";
     }
 }
